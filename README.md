@@ -38,3 +38,26 @@ streamlit run main.py --server.port PORT_NUMBER --server.fileWatcherType none
 ![Miss Label Filtering](/Images/easy_miss_label_filter.gif)
 - `Class Percentile` Value를 조절해서, Miss Label의 변경을 관찰하세요!
 - `OOD(Out of Distribution)` 을 제외하고, Miss Label이 Filtering된 Data를 쉽게 다운로드하세요!
+- 해당 기능을 사용하기 위해선, Miss Label Filtering을 시행할 데이터의 예측확률이 필요합니다.
+- 아래의 코드를 학습 코드 추가해주세요.
+    - 맨 위 Directory Path 정의 구간
+    ```python
+    PREDICT_DIR = os.path.join(BASE_DIR, "prediction") if os.path.exists(os.path.join(BASE_DIR, "prediction")) else os.mkdir(os.path.join(BASE_DIR, "prediction"))
+    ```
+    - 맨 아래 학습이 종료된 후 구간
+    ```python
+    model.eval()
+    preds = []
+    for idx, sample in tqdm(dataset_train.iterrows(), # tqdm 사용 안할 시에 삭제
+                            total=len(dataset_train),
+                            desc='Predicting'):
+        inputs = tokenizer(sample['text'], return_tensors="pt").to(DEVICE)
+        with torch.no_grad():
+            logits = model(**inputs).logits
+            # pred = torch.argmax(torch.nn.Softmax(dim=1)(logits), dim=1).cpu().numpy()
+            pred = torch.nn.Softmax(dim=1)(logits).cpu().numpy()
+            preds.extend(pred)
+
+    dataset_train['preds_value'] = np.array(preds).tolist()
+    dataset_train.to_csv(os.path.join(PREDICT_DIR, 'train_prediction.csv'), index=False)
+    ```
