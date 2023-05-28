@@ -84,18 +84,3 @@ for idx, example in enumerate(examples):
 
 
 torch.save(model.state_dict(), '/opt/ml/model_denoising_state_dict.pt' )
-
-
-
-
-#1024일 때, 519,528,742. 1에폭에 4분30초 #torch.mean
-#30에폭을 돌려도 수렴하지 않고 계속 loss가 감소함. 
-#512일 때,  568,571,705. 1에폭에 2분00초 #torch.mean
-#512일 때,  442,275,891. 1에폭에 2분00초 #torch.max
-#256일 때,  487,316,883. 1에폭에 1분05초 #torch.max
-#256일 때,  529,411,831. 1에폭에 1분26초 #torch.max, 숫자영어1번만
-
-
-#256일 때,  243,246,906. #1분05초, torch.max, 토큰3번, nel6, ep3
-#256일 때,  246,248,903. #1분46초, torch.max, 토큰3번, nel10, ep3
-#256일 때,  206,221,908. #1분46초, torch.max, 토큰3번, nel10, ep10
