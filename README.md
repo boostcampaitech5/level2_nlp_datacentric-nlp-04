@@ -32,3 +32,9 @@ rm -rf /opt/ml/.cache/matplotlib
 ```
 streamlit run main.py --server.port PORT_NUMBER --server.fileWatcherType none
 ```
+
+### 3. Function
+#### Easy Miss Label Filtering
+![Miss Label Filtering](/Images/easy_miss_label_filter.gif)
+- `Class Percentile` Value를 조절해서, Miss Label의 변경을 관찰하세요!
+- `OOD(Out of Distribution)` 을 제외하고, Miss Label이 Filtering된 Data를 쉽게 다운로드하세요!
