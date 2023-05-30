@@ -55,4 +55,11 @@ def ood_cls_filter(dataset:pd.DataFrame, preds: list, ood_percent=0.5, class_per
 	dataset_ood = dataset.iloc[ood_idx]
 	dataset_cls = dataset.iloc[class_idx]
 
+	issue_ratio = dataset_cls[dataset_cls['target'] != dataset_cls['pred']].groupby(['pred'])['ID'].count() / \
+				  dataset_cls.groupby(['pred'])['ID'].count()
+
+	distribution = pd.concat([distribution,
+							  issue_ratio.rename("Issue Ratio")],
+							 axis=1)
+
 	return dataset_cls, dataset_ood, distribution
