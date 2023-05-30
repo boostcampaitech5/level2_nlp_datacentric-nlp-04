@@ -44,9 +44,16 @@ num_to_label = {0: 'IT과학',
 # rm -rf /opt/ml/.cache/matplotlib
 plt.rcParams['font.family'] = 'NanumGothic'
 
-# 원본 train file. 
-FILE_PATH = "/opt/ml/prediction/train_prediction.csv"
-assert FILE_PATH != "", "Please set FILE_PATH. "
+with st.sidebar:
+    st.header("Configuration")
+    data_splits = st.selectbox("Choose Data Splits", ["Train Data", "Validation Data"])
+
+    if data_splits == "Train Data":
+        FILE_PATH = "/opt/ml/prediction/train_prediction.csv"
+        assert FILE_PATH != "", "Please set FILE_PATH. "
+    elif data_splits == "Validation Data":
+        FILE_PATH = "/opt/ml/prediction/valid_prediction.csv"
+        assert FILE_PATH != "", "Please set FILE_PATH. "
 
 df = pd.read_csv(FILE_PATH)
 
