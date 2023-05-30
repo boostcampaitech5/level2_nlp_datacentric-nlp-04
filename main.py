@@ -22,20 +22,20 @@ def process_label_issue(df_cls):
     return df_cls.drop(df_cls[df_cls['pred'] != df_cls['target']].index).to_csv(index=False, encoding='utf-8')
 
 st.set_page_config(layout="wide")
-label_to_num = {'정치': 0,
+label_to_num = {'IT과학': 0,
                 '경제': 1,
                 '사회': 2,
                 '생활문화': 3,
                 '세계': 4,
-                'IT과학': 5,
-                '스포츠': 6}
-num_to_label = {0 : '정치',
-                1 : '경제',
-                2 : '사회',
-                3 : '생활문화',
-                4 : '세계',
-                5 : 'IT과학',
-                6 : '스포츠'}
+                '스포츠': 5,
+                '정치': 6}
+num_to_label = {0: 'IT과학',
+                1: '경제',
+                2: '사회',
+                3: '생활문화',
+                4: '세계',
+                5: '스포츠',
+                6: '정치'}
 
 # Font Setting
 # 작동하지 않는 경우 아래의 명령어를 이용하여를 사용하여 설치. 

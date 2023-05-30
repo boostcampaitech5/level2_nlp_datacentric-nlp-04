@@ -16,13 +16,13 @@ def plot_confusion_matrix(y_true, y_pred):
 		y_pred: Predicion Label
 
 	"""
-	label_to_num = {'정치': 0,
+	label_to_num = {'IT과학': 0,
 					'경제': 1,
 					'사회': 2,
 					'생활문화': 3,
 					'세계': 4,
-					'IT과학': 5,
-					'스포츠': 6}
+					'스포츠': 5,
+					'정치': 6}
 	plot = confusion_matrix(y_true, y_pred, normalize='true')
 	plt.rcParams['font.family'] = "NanumGothicCoding"
 

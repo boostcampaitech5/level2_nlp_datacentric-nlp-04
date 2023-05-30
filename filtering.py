@@ -19,13 +19,13 @@ def ood_cls_filter(dataset:pd.DataFrame, preds: list, ood_percent=0.5, class_per
 	class_value = []
 	idx_value = []
 	distribution = pd.DataFrame(columns=['Class', 'OOD Threshold', 'Class Threshold'])
-	num_to_class = {0: '정치',
+	num_to_class = {0: 'IT과학',
 					1: '경제',
 					2: '사회',
 					3: '생활문화',
 					4: '세계',
-					5: 'IT과학',
-					6: '스포츠'}
+					5: '스포츠',
+					6: '정치'}
 
 	preds = preds.apply(lambda x : eval(x))
 	eval_preds = torch.tensor(preds)
