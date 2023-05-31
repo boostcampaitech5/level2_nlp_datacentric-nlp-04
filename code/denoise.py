@@ -21,11 +21,10 @@ model = Transformer(num_tokens=399, dim_model=256, num_heads=4,
                     num_encoder_layers=8).to(device)
 
 
-raise Exception
-# Change model path and then annotate.
-model_state_dict_path = "/opt/ml/model_denoising_state_dict.pt"
+## Change model path
+model_state_dict_path = "/opt/ml/level2_nlp_datacentric-nlp-04/code/denoise_for_train/model_denoising_state_dict_256_5e6_09.pt"
 noise_csv_path = '/opt/ml/data/train.csv'
-denoise_csv_path = '/opt/ml/train_denoise.csv'
+to_total_path = '/opt/ml/train_after_total_09.csv'
 
 
 model_state_dict = torch.load(model_state_dict_path, map_location=device)
@@ -33,18 +32,28 @@ model.load_state_dict(model_state_dict)
 df = pd.read_csv(noise_csv_path)
 
 
-arr = []
+logits = []
 for i, row in tqdm(df.iterrows(), total=df.shape[0], desc='df.iterrows()'):
     #4min 30sec
-    single_sentence = row['input_text']
-    result = predict(model, single_sentence, device)[1]
-    if result:
-        arr.append(1)
-    else :
-        arr.append(0)
-df['is_noise'] = arr
-df = df[df['is_noise'] == 0]
-df.to_csv(denoise_csv_path, index=False)
+    single_sentence = row['text']
+    pred = predict(model, single_sentence, device)
+    logit, result = pred[0].item(), pred[1]
+    logits.append(logit)
+print('The threshold for 10%, 15%, 20%, 25%, are')
+logits_temp = sorted(logits)
+print(logits_temp[int(-0.10*(len(logits_temp)))],
+      logits_temp[int(-0.15*(len(logits_temp)))],
+      logits_temp[int(-0.20*(len(logits_temp)))],
+      logits_temp[int(-0.25*(len(logits_temp)))]
+      )
+plt.hist(logits, bins=70, edgecolor='black')
+plt.xlabel('Logits')
+plt.ylabel('Frequency')
+plt.title('Histogram of Logits')
+plt.show()
+
+df['is_noise'] = logits
+df.to_csv(to_total_path, index=False)
 
 
 examples = ['나는 집에 가고 싶어', '나는 지베 가고 시퍼',
@@ -57,4 +66,3 @@ for idx, example in enumerate(examples):
     result = predict(model, example, device)
     print(example)
     print(result)
-    print()

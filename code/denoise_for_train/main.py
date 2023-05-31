@@ -22,16 +22,8 @@ print('current divice is', device)
 print('current torch version is', torch.__version__)
 
 
-data_clean8 = pd.read_csv('/opt/ml/data_clean8_saved.csv')
-data_clean8['target'] = 0
-data_dirty8 = pd.read_csv('/opt/ml/data_dirty8_saved.csv')
-data_dirty8['target'] = 1
-dataset_train = pd.concat([data_clean8, data_dirty8], axis=0)
-data_clean2 = pd.read_csv('/opt/ml/data_clean2_saved.csv')
-data_clean2['target'] = 0
-data_dirty2 = pd.read_csv('/opt/ml/data_dirty2_saved.csv')
-data_dirty2['target'] = 1
-dataset_val = pd.concat([data_clean2, data_dirty2], axis=0)
+dataset_train = pd.read_csv('/opt/ml/dataset_train.csv')
+dataset_val = pd.read_csv('/opt/ml/dataset_val.csv')
 
 
 data_train = denoiseDataset(dataset_train, tokenizer)
@@ -42,14 +34,13 @@ val_dataloader = DataLoader(data_val, batch_size=128)
 
 model = Transformer(num_tokens=399, dim_model=256, num_heads=4,
                     num_encoder_layers=8).to(device)
-opt = torch.optim.AdamW(params=model.parameters(), lr=1e-5)
+opt = torch.optim.AdamW(params=model.parameters(), lr=5e-6)
 loss_fn = nn.BCEWithLogitsLoss()
 
 
-epochs_used=1
-train_loss_list, validation_loss_list, mixed_list = fit(model, opt, 
-                                            loss_fn, train_dataloader,
-                                            val_dataloader, epochs_used, device)
+epochs_used=9
+tuple_temp = fit(model, opt, loss_fn, train_dataloader, val_dataloader, epochs_used, device)
+train_loss_list, validation_loss_list, mixed_list = tuple_temp
 
 
 plt.plot(train_loss_list, label = "Train loss")
@@ -80,7 +71,6 @@ for idx, example in enumerate(examples):
     result = predict(model, example, device)
     print(example)
     print(result)
-    print()
 
 
-torch.save(model.state_dict(), '/opt/ml/model_denoising_state_dict.pt' )
+torch.save(model.state_dict(), '/opt/ml/model_denoising_state_dict_256_5e6_09.pt' )

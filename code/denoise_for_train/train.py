@@ -103,6 +103,7 @@ def validation_loop(model, loss_fn, dataloader, device):
     model.eval()
     total_loss = 0
     y_true, y_pred = [], []
+    pred_list = []
 
     with torch.no_grad():
         for batch in tqdm(dataloader, desc='val loop'):
@@ -116,11 +117,32 @@ def validation_loop(model, loss_fn, dataloader, device):
             total_loss += loss.detach().item()
             y_true.extend(y.detach().cpu().tolist())
             y_pred.extend((pred>0).float().detach().cpu().tolist())
+            pred_list.extend(pred.view(-1).detach().cpu().tolist())
+    plt.hist(pred_list, bins=70, edgecolor='black')
+    plt.xlabel('Logits')
+    plt.ylabel('Frequency')
+    plt.title('Histogram of Logits')
+    plt.show()
     c_m = confusion_matrix(y_true=y_true, y_pred=y_pred)
     print(c_m)
     prfs = precision_recall_fscore_support(y_true=y_true, y_pred=y_pred)
     print(f'(label=0|true=0)={prfs[1][0]}, (label=1|true=1)={prfs[1][1]}')
     return round(total_loss / len(dataloader), 3), round((prfs[1][0]+prfs[1][1])/2, 3)
+
+def predict(model, single_sentence: str, device):
+    '''
+    Returns:
+    logit:float. If logit > 0, it is noise
+    is_noise:bool. If True, it is noise
+    '''
+    with torch.no_grad():
+        model.eval()
+        X = single_sentence
+        X = tokenizer(X)
+        X = torch.tensor(X).to(device).view(-1, 1)
+        pred = model(X).detach().cpu()
+        logit, is_noise = pred, (pred>0)
+    return logit, is_noise
 
 
 def fit(model, opt, loss_fn, train_dataloader, val_dataloader, epochs, device):  
@@ -142,19 +164,3 @@ def fit(model, opt, loss_fn, train_dataloader, val_dataloader, epochs, device):
         print(f"mixed_value: {mixed_value:.4f}")
         print()
     return train_loss_list, validation_loss_list, mixed_list
-
-
-def predict(model, single_sentence: str, device):
-    '''
-    Returns:
-    logit:float. If logit > 0, it is noise
-    is_noise:bool. If True, it is noise
-    '''
-    with torch.no_grad():
-        model.eval()
-        X = single_sentence
-        X = tokenizer(X)
-        X = torch.tensor(X).to(device).view(-1, 1)
-        pred = model(X).detach().cpu()
-        logit, is_noise = pred, (pred>0)
-    return logit, is_noise
