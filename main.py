@@ -46,13 +46,16 @@ plt.rcParams['font.family'] = 'NanumGothic'
 
 with st.sidebar:
     st.header("Configuration")
-    data_splits = st.selectbox("Choose Data Splits", ["Train Data", "Validation Data"])
+    data_splits = st.selectbox("Choose Data Splits", ["Train Data", "Validation Data", "GPT Generated Data"])
 
     if data_splits == "Train Data":
-        FILE_PATH = "/opt/ml/prediction/train_prediction.csv"
+        FILE_PATH = "/opt/ml/code/prediction/train_prediction.csv"
         assert FILE_PATH != "", "Please set FILE_PATH. "
     elif data_splits == "Validation Data":
-        FILE_PATH = "/opt/ml/prediction/valid_prediction.csv"
+        FILE_PATH = "/opt/ml/code/prediction/valid_prediction.csv"
+        assert FILE_PATH != "", "Please set FILE_PATH. "
+    elif data_splits == "GPT Generated Data":
+        FILE_PATH = "./dataset/gpt_generated_prediction.csv"
         assert FILE_PATH != "", "Please set FILE_PATH. "
 
 df = pd.read_csv(FILE_PATH)
@@ -61,8 +64,8 @@ st.markdown("# 🎛️ Data Control Center")
 st.markdown("## 원본 데이터")
 st.dataframe(df.head(20))
 
-st.markdown("### 데이터 label 비율")
-label_counts = df['label_text'].value_counts()
+# st.markdown("### 데이터 label 비율")
+# label_counts = df['label_text'].value_counts()
 
 
 st.markdown("## 🕹️ 데이터 조작")
