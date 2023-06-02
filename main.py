@@ -61,8 +61,8 @@ st.markdown("# 🎛️ Data Control Center")
 st.markdown("## 원본 데이터")
 st.dataframe(df.head(20))
 
-st.markdown("### 데이터 label 비율")
-label_counts = df['label_text'].value_counts()
+# st.markdown("### 데이터 label 비율")
+# label_counts = df['label_text'].value_counts()
 
 
 st.markdown("## 🕹️ 데이터 조작")
