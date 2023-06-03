@@ -25,7 +25,7 @@
 - 총 학습 데이터는 **45,678개** 이며, Train Data / Validation Data를 7:3비율로 나누어서, 학습에 이용하였다. 
 - Train Data의 **12%(5,481개)** 에는 g2p(grapheme to phoneme)가 적용되어 뉴스 제목에 노이즈가 있고, **3%(1,371개)** 에는 target이 text와는 맞지 않는 Miss Label 노이즈가 있다. 
 - Test Data는 총 9,107개로 구성되어 있다. 
-- 
+
 ## 🗓️ 개발 기간
 * 23.05.22 - 23.06.01(총 11일)
 
