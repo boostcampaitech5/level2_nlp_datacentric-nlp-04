@@ -15,7 +15,7 @@
     - [2. 오류 발생시](#2-오류-발생시)
       - [a. 폰트를 설치하였으나 폰트를 찾을 수 없다 하는 경우.](#a-폰트를-설치하였으나-폰트를-찾을-수-없다-하는-경우)
       - [b. "1. 실행 방법" 3번에서 실행되지 않는 경우.](#b-1-실행-방법-3번에서-실행되지-않는-경우)
-    - [c. Function](#c-function)
+    - [3. Function](#3-function)
       - [Easy Miss Label Filtering](#easy-miss-label-filtering)
   - [👑 Leaderboard](#-leaderboard)
 
@@ -127,7 +127,7 @@ rm -rf /opt/ml/.cache/matplotlib
 streamlit run main.py --server.port PORT_NUMBER --server.fileWatcherType none
 ```
 
-### c. Function
+### 3. Function
 #### Easy Miss Label Filtering
 ![Miss Label Filtering](./Images/easy_miss_label_filter.gif)
 - `Class Percentile` Value를 조절해서, Miss Label의 변경을 관찰하세요!
