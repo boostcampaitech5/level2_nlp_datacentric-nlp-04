@@ -63,3 +63,13 @@ def ood_cls_filter(dataset:pd.DataFrame, preds: list, ood_percent=0.5, class_per
 							 axis=1)
 
 	return dataset_cls, dataset_ood, distribution
+
+
+def synthetic_filter(df, cls_threshold):
+	correct_df = df.copy()
+	correct_df['preds_value'] = correct_df['preds_value'].apply(lambda x: eval(x))
+	correct_df['pred'] = correct_df['preds_value'].apply(lambda x: int(np.argmax(x)))
+	correct_df = correct_df[correct_df['target'] == correct_df['pred']].reset_index(drop=True)
+	correct_df = correct_df[correct_df['preds_value'].apply(lambda x : x[np.argmax(x)] > cls_threshold[np.argmax(x)])]
+	correct_df['preds_value'] = correct_df['preds_value'].apply(lambda x : x[np.argmax(x)])
+	return correct_df
